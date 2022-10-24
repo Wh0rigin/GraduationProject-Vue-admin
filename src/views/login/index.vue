@@ -6,15 +6,15 @@
         <h3 class="title">Login Form</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="account">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
+          ref="account"
+          v-model="loginForm.account"
+          placeholder="Account"
+          name="account"
           type="text"
           tabindex="1"
           autocomplete="on"
@@ -47,20 +47,7 @@
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
-      <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
-        </div>
-
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
-      </div>
+    
     </el-form>
 
     <el-dialog title="Or connect with" :visible.sync="showDialog">
@@ -97,11 +84,11 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        account: '15968707589',
+        password: '123456'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        account: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       passwordType: 'password',
@@ -128,8 +115,8 @@ export default {
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
-    if (this.loginForm.username === '') {
-      this.$refs.username.focus()
+    if (this.loginForm.account === '') {
+      this.$refs.account.focus()
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
     }
@@ -158,10 +145,12 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
+              console.log('then..')
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
             .catch(() => {
+              console.log('catch..')
               this.loading = false
             })
         } else {
@@ -169,6 +158,7 @@ export default {
           return false
         }
       })
+      console.log('complete')
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {

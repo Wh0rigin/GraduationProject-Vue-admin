@@ -1,18 +1,21 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
 export function login(data) {
+  console.log('login...:')
+  console.log(data)
   return request({
-    url: '/vue-element-admin/user/login',
+    url: '/api/manager/login',
+    // headers: { 'content-type': 'application/x-www-form-urlencoded' },
     method: 'post',
-    data
+    data:qs.stringify(data),
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/vue-element-admin/user/info',
+    url: '/api/auth/detail',
     method: 'get',
-    params: { token }
   })
 }
 
