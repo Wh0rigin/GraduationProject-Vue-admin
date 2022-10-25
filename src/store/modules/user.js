@@ -73,11 +73,10 @@ const actions = {
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
-        console.log('d1')
-        resolve(data)
-        console.log('d2')
+        state.roles =  ['admin']
+        console.log(state)
+        resolve(state)
       }).catch(error => {
-        console.log('error...')
         reject(error)
       })
     })
