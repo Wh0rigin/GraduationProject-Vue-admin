@@ -142,6 +142,18 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/books',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/books'),
+        name: '书本管理',
+        meta: { title: '书本管理', icon: 'education', affix: true,roles:['admin'] }
+      }
+    ]
+  },
   // {
   //   path: '/permission',
   //   component: Layout,
@@ -184,18 +196,18 @@ export const asyncRoutes = [
   //   ]
   // },
 
-//   {
-//     path: '/icon',
-//     component: Layout,
-//     children: [
-//       {
-//         path: 'index',
-//         component: () => import('@/views/icons/index'),
-//         name: 'Icons',
-//         meta: { title: 'Icons', icon: 'icon', noCache: true }
-//       }
-//     ]
-//   },
+  // {
+  //   path: '/icon',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/icons/index'),
+  //       name: 'Icons',
+  //       meta: { title: 'Icons', icon: 'icon', noCache: true }
+  //     }
+  //   ]
+  // },
 
 //   /** when your routing map is too long, you can split it into small modules **/
   // componentsRouter,
