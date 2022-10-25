@@ -23,3 +23,35 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getAllUser(){
+  return request({
+    url: '/api/manager/all/user',
+    method: 'get'
+  })
+}
+
+export function deleteUser(data){
+  return request({
+    url: '/api/manager/delete/user',
+    method: 'post',
+    data:qs.stringify(data),
+  })
+}
+
+export function updateUser(data){
+  return request({
+    url: '/api/manager/update/user',
+    method: 'post',
+    data:qs.stringify(data),
+  })
+}
+
+
+export function registerUser(data){
+  return request({
+    url: '/api/auth/register',
+    method: 'post',
+    data:qs.stringify(data),
+  })
+}

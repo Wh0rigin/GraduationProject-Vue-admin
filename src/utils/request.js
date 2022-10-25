@@ -45,11 +45,11 @@ service.interceptors.response.use(
    */
   response => {
     const res = response
-    console.log(res)
-    if(!res.data || res.data.code != 200 ){
-      console.log('error')
-      return Promise.reject(new Error( 'Error'))
-    }
+    // console.log(res)
+    // if(!res.data || res.data.code != 200 ){
+    //   console.log('error')
+    //   return Promise.reject(new Error( 'Error'))
+    // }
     // if the custom code is not 20000, it is judged as an error.
     // if (res.code !== 20000) {
     //   Message({

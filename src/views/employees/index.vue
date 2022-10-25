@@ -1,10 +1,11 @@
 <template>
   <div class="app-container">
-
-    <h2>{{name}}</h2>
     <!-- <button @click="getName"></button> -->
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+        Add
+      </el-button>
+      <!-- <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
       </el-select>
@@ -25,88 +26,86 @@
       </el-button>
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         reviewer
-      </el-checkbox>
+      </el-checkbox> -->
     </div>
 
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-      @sort-change="sortChange"
-    >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;"
+      @sort-change="sortChange">
+      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80"
+        :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row.ID }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Date" width="150px" align="center">
+      <el-table-column label="创建时间" width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.CreatedAt }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Title" min-width="150px">
+      <el-table-column label="上一次修改" width="200px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.UpdatedAt }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="账号" width="300px" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-          <el-tag>{{ row.type | typeFilter }}</el-tag>
+          <el-tag>{{ row.Name }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110px" align="center">
+      <el-table-column label="密码" width="600px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
+          <span>{{ row.Password }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" label="Reviewer" width="110px" align="center">
+      <el-table-column label="管理员" width="80px" align="center">
         <template slot-scope="{row}">
-          <span style="color:red;">{{ row.reviewer }}</span>
+          <span>{{ row.Manager }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Imp" width="80px">
+      <el-table-column label="电话" align="center" width="135px">
         <template slot-scope="{row}">
-          <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+          <span>{{ row.Telephone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Readings" align="center" width="95">
-        <template slot-scope="{row}">
-          <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-          <span v-else>0</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Status" class-name="status-col" width="100">
-        <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="Actions" align="center" width="213" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             Edit
           </el-button>
-          <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            Publish
-          </el-button>
-          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            Draft
-          </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button v-if="row.status != 'deleted'" size="mini" type="danger" @click="handleDelete(row, $index)">
             Delete
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
+      @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"
+        style="width: 400px; margin-left:50px;">
+        <el-form-item label="管理员" prop="Manager" :hidden="dialogStatus === 'create'?true:false">
+          <el-select v-model="temp.Manager" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name"
+              :value="item.key" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="手机号" prop="Telephone">
+          <el-input v-model="temp.Telephone" :disabled="dialogStatus === 'create'?false:true" />
+        </el-form-item>
+        <el-form-item label="账号" prop="Name" :hidden="dialogStatus === 'create'?true:false">
+          <el-input v-model="temp.Name" :disabled="dialogStatus === 'create'?false:true"/>
+        </el-form-item>
+        <el-form-item label="密码" prop="new">
+          <el-input v-model="temp.NewPassword" />
+        </el-form-item>
+        
+        <!-- <el-form-item label="Type" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name"
+              :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item label="Date" prop="timestamp">
@@ -121,17 +120,19 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Imp">
-          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
+          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3"
+            style="margin-top:8px;" />
         </el-form-item>
         <el-form-item label="Remark">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
-        </el-form-item>
+          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4 }" type="textarea"
+            placeholder="Please input" />
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           Cancel
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">
           Confirm
         </el-button>
       </div>
@@ -150,16 +151,16 @@
 </template>
 
 <script>
+import { getAllUser, deleteUser, updateUser,registerUser } from '@/api/user'
 import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
+  { key: true, display_name: 'true' },
+  { key: false, display_name: 'false' },
+
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
@@ -168,10 +169,10 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
   return acc
 }, {})
 
-import {mapState,mapMutations} from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
-  computed:{
-    ...mapState('employees',['name'])
+  computed: {
+    ...mapState('user', ['name'])
   },
   name: 'ComplexTable',
   components: { Pagination },
@@ -191,6 +192,7 @@ export default {
   },
   data() {
     return {
+
       tableKey: 0,
       list: null,
       total: 0,
@@ -210,12 +212,10 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        type: undefined,
+        account: '',
+        telephone: '',
+
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -237,9 +237,15 @@ export default {
     this.getList()
   },
   methods: {
-    ...mapMutations('employees',['getName']),
+    // ...mapMutations('employees',['getName']),
     getList() {
-      this.listLoading = false
+      this.listLoading = true
+      getAllUser().then(response => {
+        console.log(response.data.data)
+        this.total = response.data.data.count
+        this.list = response.data.data.payload
+        this.listLoading = false
+      })
       // fetchList(this.listQuery).then(response => {
       //   this.list = response.data.items
       //   this.total = response.data.total
@@ -277,13 +283,6 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
       }
     },
     handleCreate() {
@@ -297,24 +296,46 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
+          var body = {"name":this.temp.Telephone,"telephone":this.temp.Telephone,"password":this.temp.NewPassword}
+          // console.log(body)
+          registerUser(body).then((response)=>{
+            console.log(response)
+            if(response.data.code == 200){
+              this.$notify({
+                title: 'Success',
               message: 'Created Successfully',
               type: 'success',
               duration: 2000
-            })
+              })
+              this.dialogFormVisible = false
+              this.getList()
+              return
+            }
+            this.$notify({
+                title: 'Error',
+              message: 'Created Error',
+              type: 'error',
+              duration: 2000
+              })
           })
+          // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          // this.temp.author = 'vue-element-admin'
+          // createArticle(this.temp).then(() => {
+          //   this.list.unshift(this.temp)
+          //   this.dialogFormVisible = false
+          //   this.$notify({
+          //     title: 'Success',
+          //     message: 'Created Successfully',
+          //     type: 'success',
+          //     duration: 2000
+          //   })
+          // })
+
         }
       })
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -325,29 +346,67 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            const index = this.list.findIndex(v => v.id === this.temp.id)
-            this.list.splice(index, 1, this.temp)
-            this.dialogFormVisible = false
+          console.log(tempData)
+          var body = { "user": tempData }
+          console.log(body)
+          updateUser(body).then((response) => {
+            // console.log(response.data.code)
+            if (response.data.code == 200) {
+              this.$notify({
+                title: 'Success',
+                message: 'Update Successfully',
+                type: 'success',
+                duration: 2000
+              })
+              this.dialogFormVisible = false
+              this.getList()
+              return
+            }
             this.$notify({
-              title: 'Success',
-              message: 'Update Successfully',
-              type: 'success',
-              duration: 2000
-            })
+                title: 'Error',
+                message: 'Update Error:'+response.data.data.msg,
+                type: 'error',
+                duration: 2000
+              })
           })
+          // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          // updateArticle(tempData).then(() => {
+          //   const index = this.list.findIndex(v => v.id === this.temp.id)
+          //   this.list.splice(index, 1, this.temp)
+          //   this.dialogFormVisible = false
+          //   this.$notify({
+          //     title: 'Success',
+          //     message: 'Update Successfully',
+          //     type: 'success',
+          //     duration: 2000
+          //   })
+          // })
+
         }
       })
     },
     handleDelete(row, index) {
+      if (this.name == row.Name) {
+        this.$notify({
+          title: 'Warning',
+          message: '你不能将自己删除',
+          type: 'warning',
+          duration: 2000
+        })
+        return
+      }
+      // console.log(row.Name)
+      deleteUser({ 'account': row.Name }).then(response => {
+        // console.log(response)
+      })
       this.$notify({
         title: 'Success',
         message: 'Delete Successfully',
         type: 'success',
         duration: 2000
       })
-      this.list.splice(index, 1)
+      this.getList()
+      // this.list.splice(index, 1)
     },
     handleFetchPv(pv) {
       fetchPv(pv).then(response => {
@@ -378,7 +437,7 @@ export default {
         }
       }))
     },
-    getSortClass: function(key) {
+    getSortClass: function (key) {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
     }

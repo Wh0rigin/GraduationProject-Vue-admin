@@ -1,11 +1,12 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :class="className" :style="{ height: height, width: width }" />
 </template>
 
 <script>
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
+import { bookNumber, bookRentedNumber, bookAvailableNumber } from '@/api/book'
 
 const animationDuration = 6000
 
@@ -23,11 +24,12 @@ export default {
     height: {
       type: String,
       default: '300px'
-    }
+    },
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      chartData: [0, 0, 0]
     }
   },
   mounted() {
@@ -43,9 +45,33 @@ export default {
     this.chart = null
   },
   methods: {
+    fetchData() {
+      bookNumber().then(response => {
+        console.log(response)
+        if (response.data.code == 200) {
+          this.chartData[0] = response.data.data.number
+          bookRentedNumber().then(response => {
+            if (response.data.code == 200) {
+              this.chartData[1] = response.data.data.number
+              bookAvailableNumber().then(response => {
+                if (response.data.code == 200) {
+                  this.chartData[2] = response.data.data.number
+                  console.log(this.chartData)
+                  this.setOptions(this.chartData)
+                }
+              })
+            }
+          })
+        }
+      })
+    },
     initChart() {
+      this.fetchData()
+      console.log(this.chartData)
       this.chart = echarts.init(this.$el, 'macarons')
-
+      this.setOptions(this.chartData)
+    },
+    setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
         tooltip: {
           trigger: 'axis',
@@ -62,7 +88,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['馆存书目', '借出书目','剩余书目'],
+          data: ['馆存书目', '借出书目', '剩余书目'],
           axisTick: {
             alignWithLabel: true
           }
@@ -78,7 +104,7 @@ export default {
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
+          data: this.chartData,
           animationDuration
         }]
       })

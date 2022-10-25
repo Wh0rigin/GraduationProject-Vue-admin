@@ -63,6 +63,7 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import SocialSign from './components/SocialSignin'
+import { title } from '@/settings'
 
 export default {
   name: 'Login',
@@ -150,7 +151,7 @@ export default {
             })
             .catch((error) => {
               this.loading = false
-              alert('账号或密码错误')
+              this.$alert('账号或密码错误')
             })
         } else {
           console.log('error submit!!')

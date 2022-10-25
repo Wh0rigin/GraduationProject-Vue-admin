@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { transactionList } from '@/api/remote-search'
+import { bookList } from '@/api/book'
 
 export default {
   filters: {
@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     fetchData() {
-      transactionList().then(response => {
+      bookList().then(response => {
         this.list = response.data.data.payload.slice(0, 5)
       })
     }

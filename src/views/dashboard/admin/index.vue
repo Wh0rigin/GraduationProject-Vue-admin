@@ -19,7 +19,7 @@
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <!-- <line-chart :chart-data="lineChartData" /> -->
-      <bar-chart />
+      <bar-chart :chart-data="[12,123,123]" />
     </el-row>
 
     <!-- <el-row :gutter="32">
@@ -55,24 +55,6 @@ import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
 import BoxCard from './components/BoxCard'
 
-const lineChartData = {
-  newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
-  },
-  messages: {
-    expectedData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
-  },
-  purchases: {
-    expectedData: [80, 100, 121, 104, 105, 90, 100],
-    actualData: [120, 90, 100, 138, 142, 130, 130]
-  },
-  shoppings: {
-    expectedData: [130, 140, 141, 142, 145, 150, 160],
-    actualData: [120, 82, 91, 154, 162, 140, 130]
-  }
-}
 
 export default {
   name: 'DashboardAdmin',
@@ -89,13 +71,11 @@ export default {
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+      
     }
   },
   methods: {
-    handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
-    }
+  
   },
   
 }
