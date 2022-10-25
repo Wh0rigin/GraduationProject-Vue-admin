@@ -2,8 +2,6 @@ import request from '@/utils/request'
 import qs from 'qs'
 
 export function login(data) {
-  console.log('login...:')
-  console.log(data)
   return request({
     url: '/api/manager/login',
     // headers: { 'content-type': 'application/x-www-form-urlencoded' },

@@ -3,6 +3,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
+  
   token: getToken(),
   name: '',
   avatar: '',
@@ -36,7 +37,11 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ account: account.trim(), password: password }).then(response => {
         const { data } = response
-        console.log(data.data.AccessToken)
+        if(!data){
+          reject('账号或密码错误')
+          return
+        }
+        // console.log(data.data.AccessToken)
         commit('SET_TOKEN',data.data.AccessToken)
         setToken(data.data.AccessToken)
         resolve()

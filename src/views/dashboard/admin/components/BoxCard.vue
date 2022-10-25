@@ -5,12 +5,12 @@
     </div>
     <div style="position:relative;">
       <pan-thumb :image="avatar" class="panThumb" />
-      <mallki class-name="mallki-text" text="vue-element-admin" />
+      <mallki class-name="mallki-text" :text="name" />
       <div style="padding-top:35px;" class="progress-item">
-        <span>Vue</span>
-        <el-progress :percentage="70" />
+        <!-- <span>Vue</span>
+        <el-progress :percentage="70" /> -->
       </div>
-      <div class="progress-item">
+      <!-- <div class="progress-item">
         <span>JavaScript</span>
         <el-progress :percentage="18" />
       </div>
@@ -21,13 +21,13 @@
       <div class="progress-item">
         <span>ESLint</span>
         <el-progress :percentage="100" status="success" />
-      </div>
+      </div> -->
     </div>
   </el-card>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters,mapState } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import Mallki from '@/components/TextHoverEffect/Mallki'
 
@@ -52,11 +52,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'name',
+    // ...mapGetters('user',[
+    //   'name',
+    //   'avatar',
+    //   'roles'
+    // ])
+    ...mapState('user',['name',
       'avatar',
-      'roles'
-    ])
+      'roles'])
   }
 }
 </script>

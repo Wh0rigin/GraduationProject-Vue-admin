@@ -145,20 +145,18 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
-              console.log('then..')
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
-            .catch(() => {
-              console.log('catch..')
+            .catch((error) => {
               this.loading = false
+              alert('账号或密码错误')
             })
         } else {
           console.log('error submit!!')
           return false
         }
       })
-      console.log('complete')
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {

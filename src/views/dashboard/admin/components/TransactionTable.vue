@@ -1,20 +1,23 @@
 <template>
   <el-table :data="list" style="width: 100%;padding-top: 15px;">
-    <el-table-column label="Order_No" min-width="200">
+    <el-table-column label="IBSN" min-width="200">
       <template slot-scope="scope">
-        {{ scope.row.order_no | orderNoFilter }}
+        {{ scope.row.Isbn | orderNoFilter }}
       </template>
     </el-table-column>
-    <el-table-column label="Price" width="195" align="center">
+    <el-table-column label="名称" width="195" align="center">
       <template slot-scope="scope">
-        ¥{{ scope.row.price | toThousandFilter }}
+        {{ scope.row.Name  }}
       </template>
     </el-table-column>
-    <el-table-column label="Status" width="100" align="center">
-      <template slot-scope="{row}">
-        <el-tag :type="row.status | statusFilter">
-          {{ row.status }}
-        </el-tag>
+    <el-table-column label="馆内数量" width="195" align="center">
+      <template slot-scope="scope">
+        {{ scope.row.Number  }}
+      </template>
+    </el-table-column>
+    <el-table-column label="可借阅数量" width="195" align="center">
+      <template slot-scope="scope">
+        {{ scope.row.AvailableNumber  }}
       </template>
     </el-table-column>
   </el-table>
@@ -47,7 +50,7 @@ export default {
   methods: {
     fetchData() {
       transactionList().then(response => {
-        this.list = response.data.items.slice(0, 8)
+        this.list = response.data.data.payload.slice(0, 5)
       })
     }
   }
