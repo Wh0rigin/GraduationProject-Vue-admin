@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item"
+      <el-input v-model="listQuery.isbn" placeholder="isbn" style="width: 200px;" class="filter-item"
         @keyup.enter.native="handleFilter" />
       <!-- <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
@@ -139,7 +139,7 @@ import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { bookListNonDto, deleteBook, createBook } from '@/api/book'
+import { bookListNonDto, deleteBook, createBook,searchBook } from '@/api/book'
 
 
 
@@ -232,8 +232,18 @@ export default {
       // })
     },
     handleFilter() {
-      this.listQuery.page = 1
-      this.getList()
+      if(this.listQuery.isbn != ""){
+        this.listLoading = true
+        this.listQuery.page = 1
+        searchBook({isbn:this.listQuery.isbn}).then(response=>{
+          // console.log(response)
+          this.list = response.data.data.payload
+          this.total = response.data.data.count
+          this.listLoading = false
+        })
+      }else{
+        this.getList()
+      }
     },
     handleModifyStatus(row, status) {
       this.$message({
@@ -348,13 +358,14 @@ export default {
       deleteBook({ "isbn": row.Isbn }).then(response => {
         console.log(response)
         if (response.data.code == 200) {
-          his.$notify({
+          this.$notify({
             title: 'Success',
             message: 'Delete Successfully',
             type: 'success',
             duration: 2000
           })
           this.getList()
+          return
         }
         this.$notify({
           title: 'Error',
