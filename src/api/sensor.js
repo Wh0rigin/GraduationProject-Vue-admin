@@ -17,3 +17,11 @@ export function GetRecentData(query) {
         method: 'get',
     })
 }
+
+
+export function GetTotalByName(data) {
+    return request({
+        url: '/api/sensor/total/'+data.sensorName,
+        method: 'get',
+    })
+}

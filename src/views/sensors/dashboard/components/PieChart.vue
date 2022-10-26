@@ -1,11 +1,12 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :class="className" :style="{ height: height, width: width }" />
 </template>
 
 <script>
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
+import { GetTotalByName } from '@/api/sensor'
 
 export default {
   mixins: [resize],
@@ -25,7 +26,8 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      dataList: []
     }
   },
   mounted() {
@@ -43,7 +45,25 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-
+      this.dataList = []
+      GetTotalByName({ sensorName: 'temperature' }).then(response => {
+        if (response.data.code == 200) {
+          this.dataList.push({ name: '温度', value: response.data.data.total })
+          GetTotalByName({ sensorName: 'humidity' }).then(response => {
+            if (response.data.code == 200) {
+              this.dataList.push({ name: '湿度', value: response.data.data.total })
+              GetTotalByName({ sensorName: 'light' }).then(response => {
+                if (response.data.code == 200) {
+                  this.dataList.push({ name: '光照度', value: response.data.data.total })
+                  this.setOption(this.dataList)
+                }
+              })
+            }
+          })
+        }
+      })
+    },
+    setOption(data) {
       this.chart.setOption({
         tooltip: {
           trigger: 'item',
@@ -52,22 +72,16 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          data: ['温度', '湿度', '光照度']
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '传感数据总数',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 95],
             center: ['50%', '38%'],
-            data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
+            data: data,
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           }
