@@ -19,7 +19,13 @@
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <!-- <line-chart :chart-data="lineChartData" /> -->
-      <bar-chart :chart-data="[12,123,123]" />
+      <!-- <el-col :xs="60" :sm="60" :lg="15"> -->
+        <bar-chart  />
+      <!-- </el-col> -->
+      <!-- <el-col :xs="60" :sm="60" :lg="8">
+        <bar-chart  />
+      </el-col> -->
+      
     </el-row>
 
     <!-- <el-row :gutter="32">
