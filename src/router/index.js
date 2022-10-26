@@ -154,6 +154,30 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/sensors',
+    component: Layout,
+    name: '传感器管理',
+    meta: {
+      title: '传感器管理',
+      icon: 'nested',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/sensors'),
+        name: '传感器列表',
+        meta: { title: '传感器列表', icon: 'list', affix: true,roles:['admin'] }
+      },
+      {
+        path: 'keyboard',
+        component: () => import('@/views/sensors/keyboard'),
+        name: '传感器表盘',
+        meta: { title: '传感器表盘', icon: 'dashboard', affix: true,roles:['admin'] }
+      }
+    ]
+  },
   // {
   //   path: '/permission',
   //   component: Layout,
