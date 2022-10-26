@@ -171,8 +171,8 @@ export const asyncRoutes = [
         meta: { title: '传感器列表', icon: 'list', affix: true,roles:['admin'] }
       },
       {
-        path: 'keyboard',
-        component: () => import('@/views/sensors/keyboard'),
+        path: 'dashboard',
+        component: () => import('@/views/sensors/dashboard/index'),
         name: '传感器表盘',
         meta: { title: '传感器表盘', icon: 'dashboard', affix: true,roles:['admin'] }
       }

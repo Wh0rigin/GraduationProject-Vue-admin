@@ -291,7 +291,7 @@ export default {
           var body = {'name':this.temp.name,'isbn':this.temp.isbn,'number':parseInt(this.temp.number),'rentNumber':parseInt(this.temp.rentNumber)}
           // console.log(body)
           createBook(body).then(response => {
-            console.log(response)
+            // console.log(response)
             if (response.data.code == 200) {
               this.dialogFormVisible = false
               this.$notify({
@@ -356,7 +356,7 @@ export default {
     handleDelete(row, index) {
       // console.log(row.Isbn)
       deleteBook({ "isbn": row.Isbn }).then(response => {
-        console.log(response)
+        // console.log(response)
         if (response.data.code == 200) {
           this.$notify({
             title: 'Success',

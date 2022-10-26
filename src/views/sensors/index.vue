@@ -193,7 +193,7 @@ export default {
     getList() {
       this.listLoading = true
       GetAllSensor(this.listQuery).then(response=>{
-        console.log(response)
+        // console.log(response)
         this.list = response.data.data.payload
         this.total = response.data.data.count
         this.listLoading = false

@@ -2,7 +2,8 @@
   <div class="app-container">
     <!-- <button @click="getName"></button> -->
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
+        @click="handleCreate">
         Add
       </el-button>
       <!-- <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
@@ -86,22 +87,22 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"
         style="width: 400px; margin-left:50px;">
-        <el-form-item label="管理员" prop="Manager" :hidden="dialogStatus === 'create'?true:false">
+        <el-form-item label="管理员" prop="Manager" :hidden="dialogStatus === 'create' ? true : false">
           <el-select v-model="temp.Manager" class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name"
               :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item label="手机号" prop="Telephone">
-          <el-input v-model="temp.Telephone" :disabled="dialogStatus === 'create'?false:true" />
+          <el-input v-model="temp.Telephone" :disabled="dialogStatus === 'create' ? false : true" />
         </el-form-item>
-        <el-form-item label="账号" prop="Name" :hidden="dialogStatus === 'create'?true:false">
-          <el-input v-model="temp.Name" :disabled="dialogStatus === 'create'?false:true"/>
+        <el-form-item label="账号" prop="Name" :hidden="dialogStatus === 'create' ? true : false">
+          <el-input v-model="temp.Name" :disabled="dialogStatus === 'create' ? false : true" />
         </el-form-item>
         <el-form-item label="密码" prop="new">
           <el-input v-model="temp.NewPassword" />
         </el-form-item>
-        
+
         <!-- <el-form-item label="Type" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name"
@@ -151,7 +152,7 @@
 </template>
 
 <script>
-import { getAllUser, deleteUser, updateUser,registerUser } from '@/api/user'
+import { getAllUser, deleteUser, updateUser, registerUser } from '@/api/user'
 import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -241,10 +242,19 @@ export default {
     getList() {
       this.listLoading = true
       getAllUser(this.listQuery).then(response => {
-        console.log(response.data)
-        this.total = response.data.data.count
-        this.list = response.data.data.payload
-        this.listLoading = false
+        // console.log(response.data)
+        if (response.data.code == 200) {
+          this.total = response.data.data.count
+          this.list = response.data.data.payload
+          this.listLoading = false
+          return
+        }
+        this.$notify({
+          title: 'Error',
+          message: '查询失败:'+response.data.msg,
+          type: 'error',
+          duration: 2000
+        })
       })
       // fetchList(this.listQuery).then(response => {
       //   this.list = response.data.items
@@ -296,27 +306,27 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          var body = {"name":this.temp.Telephone,"telephone":this.temp.Telephone,"password":this.temp.NewPassword}
+          var body = { "name": this.temp.Telephone, "telephone": this.temp.Telephone, "password": this.temp.NewPassword }
           // console.log(body)
-          registerUser(body).then((response)=>{
+          registerUser(body).then((response) => {
             console.log(response)
-            if(response.data.code == 200){
+            if (response.data.code == 200) {
               this.$notify({
                 title: 'Success',
-              message: 'Created Successfully',
-              type: 'success',
-              duration: 2000
+                message: 'Created Successfully',
+                type: 'success',
+                duration: 2000
               })
               this.dialogFormVisible = false
               this.getList()
               return
             }
             this.$notify({
-                title: 'Error',
+              title: 'Error',
               message: 'Created Error',
               type: 'error',
               duration: 2000
-              })
+            })
           })
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           // this.temp.author = 'vue-element-admin'
@@ -363,11 +373,11 @@ export default {
               return
             }
             this.$notify({
-                title: 'Error',
-                message: 'Update Error:'+response.data.data.msg,
-                type: 'error',
-                duration: 2000
-              })
+              title: 'Error',
+              message: 'Update Error:' + response.data.data.msg,
+              type: 'error',
+              duration: 2000
+            })
           })
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
           // updateArticle(tempData).then(() => {

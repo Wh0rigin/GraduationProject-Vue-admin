@@ -47,7 +47,7 @@ export default {
   methods: {
     fetchData() {
       bookNumber().then(response => {
-        // console.log(response)
+        console.log(response)
         if (response.data.code == 200) {
           this.chartData[0] = response.data.data.number
           bookRentedNumber().then(response => {
@@ -56,7 +56,7 @@ export default {
               bookAvailableNumber().then(response => {
                 if (response.data.code == 200) {
                   this.chartData[2] = response.data.data.number
-                  // console.log(this.chartData)
+                  console.log(this.chartData)
                   this.setOptions(this.chartData)
                 }
               })
@@ -67,7 +67,7 @@ export default {
     },
     initChart() {
       this.fetchData()
-      // console.log(this.chartData)
+      console.log(this.chartData)
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },

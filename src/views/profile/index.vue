@@ -7,7 +7,7 @@
           <user-card :user="user" />
         </el-col>
 
-        <el-col :span="18" :xs="24">
+        <!-- <el-col :span="18" :xs="24">
           <el-card>
             <el-tabs v-model="activeTab">
               <el-tab-pane label="Activity" name="activity">
@@ -21,7 +21,7 @@
               </el-tab-pane>
             </el-tabs>
           </el-card>
-        </el-col>
+        </el-col> -->
 
       </el-row>
     </div>
