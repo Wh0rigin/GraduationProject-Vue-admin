@@ -1,3 +1,4 @@
+import { param } from '@/utils'
 import request from '@/utils/request'
 import qs from 'qs'
 
@@ -24,10 +25,11 @@ export function logout() {
   })
 }
 
-export function getAllUser(){
+export function getAllUser(query){
   return request({
     url: '/api/manager/all/user',
-    method: 'get'
+    method: 'get',
+    params:query
   })
 }
 

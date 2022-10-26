@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.isbn" placeholder="isbn" style="width: 200px;" class="filter-item"
+      <el-input v-model="listQuery.isbnorname" placeholder="isbn or name" style="width: 200px;" class="filter-item"
         @keyup.enter.native="handleFilter" />
       <!-- <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
@@ -59,22 +59,22 @@
           <span>{{ row.Isbn }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总馆内数量" width="150px" align="center">
+      <el-table-column label="总馆内数量" width="100px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.Number }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="借出数量" width="150px" align="center">
+      <el-table-column label="借出数量" width="100px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.RentNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="可借数量" width="150px" align="center">
+      <el-table-column label="可借数量" width="100px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.Number - row.RentNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="Actions" align="center" width="150" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <!-- <el-button type="primary" size="mini" @click="handleUpdate(row)">
             Edit
@@ -215,7 +215,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      bookListNonDto().then(response => {
+      bookListNonDto(this.listQuery).then(response => {
         // console.log(response)
         this.list = response.data.data.payload
         this.total = response.data.data.count
@@ -232,18 +232,18 @@ export default {
       // })
     },
     handleFilter() {
-      if(this.listQuery.isbn != ""){
+      // if(this.listQuery.isbn != ""){
         this.listLoading = true
         this.listQuery.page = 1
-        searchBook({isbn:this.listQuery.isbn}).then(response=>{
-          // console.log(response)
-          this.list = response.data.data.payload
-          this.total = response.data.data.count
-          this.listLoading = false
-        })
-      }else{
+        // searchBook({isbn:this.listQuery.isbn}).then(response=>{
+        //   // console.log(response)
+        //   this.list = response.data.data.payload
+        //   this.total = response.data.data.count
+        //   this.listLoading = false
+        // })
+      // }else{
         this.getList()
-      }
+      // }
     },
     handleModifyStatus(row, status) {
       this.$message({

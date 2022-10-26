@@ -47,7 +47,7 @@
           <span>{{ row.UpdatedAt }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="账号" width="300px" align="center">
+      <el-table-column label="账号" width="150px" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
           <el-tag>{{ row.Name }}</el-tag>
@@ -68,7 +68,7 @@
           <span>{{ row.Telephone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="213" class-name="small-padding fixed-width">
+      <el-table-column label="Actions" align="center" width="150" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             Edit
@@ -240,8 +240,8 @@ export default {
     // ...mapMutations('employees',['getName']),
     getList() {
       this.listLoading = true
-      getAllUser().then(response => {
-        console.log(response.data.data)
+      getAllUser(this.listQuery).then(response => {
+        console.log(response.data)
         this.total = response.data.data.count
         this.list = response.data.data.payload
         this.listLoading = false
@@ -348,7 +348,7 @@ export default {
           const tempData = Object.assign({}, this.temp)
           console.log(tempData)
           var body = { "user": tempData }
-          console.log(body)
+          // console.log(body)
           updateUser(body).then((response) => {
             // console.log(response.data.code)
             if (response.data.code == 200) {
