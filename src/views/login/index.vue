@@ -151,7 +151,7 @@ export default {
             })
             .catch((error) => {
               this.loading = false
-              this.$alert('账号或密码错误')
+              this.$alert('账号或密码错误') 
             })
         } else {
           console.log('error submit!!')
