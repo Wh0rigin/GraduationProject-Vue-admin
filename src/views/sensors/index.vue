@@ -117,6 +117,7 @@ const calendarTypeOptions = [
   { key: 'temperature', display_name: '温度' },
   { key: 'humidity', display_name: '湿度' },
   { key: 'lamp', display_name: '照明灯' },
+  { key: 'fire', display_name: '火焰' },
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }

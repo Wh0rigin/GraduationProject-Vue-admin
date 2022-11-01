@@ -19,17 +19,17 @@
       </div>
     </el-row>
       <el-row :gutter="40" class="panel-group">
-      <div class="card-panel" @click="handleSetLineChartData('temperature')">
-        <div class="card-panel-icon-wrapper icon-people">
+      <div class="card-panel" @click="handleSetLineChartData('fire')">
+        <div class="card-panel-icon-wrapper icon-shopping">
           <svg-icon icon-class="example" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Temperature
+            Fire
           </div>
           <!-- <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" /> -->
           <div class="card-panel-num">
-            温度
+            火焰
           </div>
         </div>
       </div>

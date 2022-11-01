@@ -58,7 +58,12 @@ export default {
                   GetTotalByName({ sensorName: 'lamp' }).then(response => {
                     if (response.data.code == 200) {
                       this.dataList.push({ name: '照明灯', value: response.data.data.total })
-                      this.setOption(this.dataList)
+                      GetTotalByName({ sensorName: 'fire' }).then(response => {
+                        if (response.data.code == 200) {
+                          this.dataList.push({ name: '火焰', value: response.data.data.total })
+                          this.setOption(this.dataList)
+                        }
+                      })
                     }
                   })
                 }
@@ -77,7 +82,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['温度', '湿度',  '照明灯','光照度']
+          data: ['温度', '湿度', '照明灯', '光照度','火焰']
         },
         series: [
           {
